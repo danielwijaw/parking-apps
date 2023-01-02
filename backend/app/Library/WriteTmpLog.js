@@ -29,7 +29,7 @@ module.exports = async function(params = {}){
         }
     }
 
-    parameterDefault.fileName = parameterDefault.directoryLog+moment().tz("Asia/Jakarta").format('YYYY')+'/'+moment().tz("Asia/Jakarta").format('YYYY-MM')+'/'+moment().tz("Asia/Jakarta").format('YYYY-MM-DD')+'/'+parameterDefault.nameLog+'_'+moment().tz("Asia/Jakarta").format('YYYY-MM-DD::HH')+'.json'
+    parameterDefault.fileName = parameterDefault.directoryLog+moment().format('YYYY')+'/'+moment().format('YYYY-MM')+'/'+moment().format('YYYY-MM-DD')+'/'+parameterDefault.nameLog+'_'+moment().format('YYYY-MM-DD::HH')+'.json'
 
     const exists = await Drive.exists(parameterDefault.fileName)
     if(!exists){

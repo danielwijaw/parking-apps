@@ -26,7 +26,7 @@ module.exports = function(params = {}){
             responseCode: returnJson.responseCode,
             message: returnJson.message,
             returnDate: new Date(),
-            date: moment().tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss")
+            date: moment().format("YYYY-MM-DD HH:mm:ss")
         },
         body: {
             status: String(returnJson.status),

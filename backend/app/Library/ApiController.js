@@ -577,9 +577,9 @@ class ApiController{
 
     async count({ params, request, response }) {
 
-        var date_start = request.get().date_start || moment().tz("Asia/Jakarta").subtract(1, 'months').format('YYYY-MM-DD')
+        var date_start = request.get().date_start || moment().subtract(1, 'months').format('YYYY-MM-DD')
 
-        var date_stop = request.get().date_stop || moment().tz("Asia/Jakarta").format('YYYY-MM-DD')
+        var date_stop = request.get().date_stop || moment().format('YYYY-MM-DD')
 
         const keyNameRedis = this.relationsNameModel+params.id+date_start+date_stop+'count';
 

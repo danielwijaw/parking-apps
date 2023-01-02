@@ -1,6 +1,6 @@
 'use strict'
 var moment = require('moment-timezone');
-moment().tz("Asia/Jakarta").format();
+moment().format();
 moment.tz.setDefault("Asia/Jakarta");
 
 var startRequest = new Date();
