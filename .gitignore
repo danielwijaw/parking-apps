@@ -1,0 +1,18 @@
+# Node modules
+!node_modules/@adonisjs/framework/src/Route/Resource.js
+!node_modules/@radmen/adonis-lucid-soft-deletes/src/Traits/SoftDeletes.js
+!node_modules/pdf-creator-node/index.js
+!node_modules/@adonisjs/framework/src/Server/index.js
+node_modules
+
+# Environment variables, never commit this file
+.env
+
+# The development sqlite file
+database/*.sqlite
+
+public/xlsx/*
+
+.DS_Store
+public/.DS_Store
+package-lock.json

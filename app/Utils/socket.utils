@@ -1,0 +1,24 @@
+const Ws = use('Ws')
+
+function broadcast (id, type, data) {
+  const channel = Ws.getChannel('notification:*')
+  if (!channel) return
+
+  const topic = channel.topic(`notification:${id}`)
+  if (!topic) {
+    console.error('Has no topic')
+    return
+  }else{
+      console.log("OKE")
+  }
+
+  // emit, broadcast, broadcastToAll
+  topic.broadcastToAll(`message`, {
+    type,
+    data
+  });
+}
+
+module.exports = {
+  broadcast
+}

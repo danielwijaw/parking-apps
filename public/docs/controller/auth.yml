@@ -1,0 +1,56 @@
+/api/-_-/employee-status:
+  get:
+    tags:
+      - FIRST DO !
+    description: Get Employee Status For Created New Employee
+    summary: Get Employee Status
+    produces:
+      - application/json
+    parameters:
+      - name: page
+        description: For Pagination (page:limit)
+        in: query
+        required: false
+        type: string
+      - name: search
+        description: For Searching (ILIKE) (key:value)
+        in: query
+        required: false
+        type: string
+      - name: where
+        description: For Searching (WHERE) (key:value)
+        in: query
+        required: false
+        type: string
+      - name: order
+        description: For Ordering (key:asc/desc)
+        in: query
+        required: false
+        type: string
+    responses:
+      201:
+        description: Return Data
+      500:
+        description: Error Data
+
+/api/-_-/employee:
+  post:
+    tags:
+      - FIRST DO !
+    description: Create Employee
+    summary: Create Employee
+    produces:
+      - application/json
+    parameters:
+      - name: employees_niprs
+        description: employee niprs
+        in: formData
+        required: true
+        type: string
+    responses:
+      201:
+        description: Return Data
+      500:
+        description: Error Data
+      
+      
