@@ -39,7 +39,7 @@ services:
       - "3333:3333"
     depends_on:
       - postgres
-    command: sh -c "npm run migrate && adonis serve --dev"
+    command: sh -c "echo 'Please Wait Until Database Created!' && sleep 10 && npm run migrate && adonis serve --dev"
   nginx:
     build: ./nginx
     container_name: keda-nginx
