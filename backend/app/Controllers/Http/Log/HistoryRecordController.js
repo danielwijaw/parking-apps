@@ -25,7 +25,7 @@ class HistoryRecordController {
             )
         }
 
-        const findRecord = await HistoryUser.query().select('setup_log_activities_users', 'created_at', 'setup_log_activities_old_data').where('setup_log_activities_models', request.all().tables).where('setup_log_activities_activity', 'Added New Record').whereRaw('setup_log_activities_old_data::varchar ilike \'%'+request.all().uuid+'%\' ').first();
+        const findRecord = await HistoryUser.query().select('created_at', 'setup_log_activities_old_data').where('setup_log_activities_models', request.all().tables).where('setup_log_activities_activity', 'Added New Record').whereRaw('setup_log_activities_old_data::varchar ilike \'%'+request.all().uuid+'%\' ').first();
 
         if(!findRecord){
             return response.status(400).json(
@@ -68,7 +68,7 @@ class HistoryRecordController {
             )
         }
 
-        const findRecord = await HistoryUser.query().select('setup_log_activities_users', 'created_at', 'setup_log_activities_old_data').where('setup_log_activities_models', request.all().tables).where('setup_log_activities_activity', 'Remove Record').whereRaw('setup_log_activities_old_data::varchar ilike \'%'+request.all().uuid+'%\' ').first();
+        const findRecord = await HistoryUser.query().select('created_at', 'setup_log_activities_old_data').where('setup_log_activities_models', request.all().tables).where('setup_log_activities_activity', 'Remove Record').whereRaw('setup_log_activities_old_data::varchar ilike \'%'+request.all().uuid+'%\' ').first();
 
         if(!findRecord){
             return response.status(400).json(

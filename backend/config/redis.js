@@ -32,15 +32,15 @@ module.exports = {
   |
   */
   local: {
-    host: '127.0.0.1',
-    port: 6379,
+    host: Env.get('REDIS_HOST', '127.0.0.1'),
+    port: Env.get('REDIS_PORT', '127.0.0.1'),
     password: null,
     db: 0,
     keyPrefix: ''
   },
   development: {
-    host: '127.0.0.1',
-    port: 6380,
+    host: Env.get('REDIS_HOST', '127.0.0.1'),
+    port: Env.get('REDIS_PORT', '127.0.0.1'),
     password: null,
     db: 0,
     keyPrefix: ''
@@ -56,14 +56,14 @@ module.exports = {
   */
   cluster: {
     clusters: [{
-      host: '127.0.0.1',
-      port: 6379,
+      host: Env.get('REDIS_HOST', '127.0.0.1'),
+      port: Env.get('REDIS_PORT', '127.0.0.1'),
       password: null,
       db: 0
     },
     {
-      host: '127.0.0.1',
-      port: 6380,
+      host: Env.get('REDIS_HOST', '127.0.0.1'),
+      port: Env.get('REDIS_PORT', '127.0.0.1'),
       password: null,
       db: 0
     }]

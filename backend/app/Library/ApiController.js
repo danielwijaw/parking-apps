@@ -2,7 +2,7 @@
 
 const ResponseHelper = require("../../app/Library/ResponseHelper")
 const { validateAll } = use("Validator");
-const modelData = use("App/Models/Token");
+const modelData = use("App/Models/ParkingTransaction");
 const Redis = use('Redis');
 const HistoryUser = use("App/Models/Log/HistoryUser");
 const WriteTmpLog = require("../Library/WriteTmpLog");
@@ -88,10 +88,19 @@ class ApiController{
         if(requestList){
             for(var keyList in requestList){
                 var search = requestList[keyList].split(':')
-                if(search[0] && search[1] && search[2]){
+                for(let keyS in search){
+                  search[keyS] = search[keyS].replace(/{}/g, ':');
+                }
+                if(search[0] && search[1] && search[2] && !search[3]){
                     listData.whereRaw(search[0]+`::DATE >= DATE('`+search[1]+`') and `+search[0]+`::DATE <= DATE('`+search[2]+`') AND
                     1 = ?
                     `,[1])
+                }else if(search[0] && search[1] && search[2] && search[3] == "NOTDATE"){
+                  listData.whereRaw(search[0]+` >= ('`+search[1]+`') and `+search[0]+` <= ('`+search[2]+`') AND
+                  1 = ?
+                  `,[1])
+                }else{
+
                 }
             }
         }
@@ -165,7 +174,7 @@ class ApiController{
         }
     }
 
-    async index({ auth, request, response }) {
+    async index({ request, response }) {
         var page = request.get().page || 1+':'+20
         var page = page.split(':')
 
@@ -175,13 +184,16 @@ class ApiController{
         var search = request.get().search
         var where = request.get().where
 
+        var whereOr = request.get().whereOr
+        var range = request.get().range
+
         var groupBy = request.get().groupby
         var whereHas = request.get().wherehas
 
         var nestedSearch = request.get().nestedSearch
         var valNestedSearch = request.get().valNestedSearch
 
-        const keyNameRedis = this.relationsNameModel+'indexpage'+page+order+search+where+groupBy+whereHas+nestedSearch+valNestedSearch;
+        const keyNameRedis = this.relationsNameModel+'indexpage'+page+order+search+where+groupBy+whereHas+nestedSearch+valNestedSearch+whereOr+range;
 
         const storeDataRedis = await Redis.get(keyNameRedis)
 
@@ -194,6 +206,8 @@ class ApiController{
         var listData = this.modelData.query()
         this.generateSearchModelData(listData, request.get().search)
         this.generateWhereModelData(listData, request.get().where)
+        this.generateSearchModelDataOr(listData, request.get().whereOr)
+        this.generateRangeModelData(listData, request.get().range)
         this.generateGroupByModelData(listData, request.get().groupby)
         this.generateWhereHasModelData(listData, request.get().wherehas)
         this.generateNestedSearchModelData(listData, nestedSearch, valNestedSearch)
@@ -220,7 +234,7 @@ class ApiController{
         }));
     }
 
-    async show({ auth, params, response }) {
+    async show({ params, response }) {
 
         const keyNameRedis = this.relationsNameModel+params.id+'showrow';
 
@@ -262,7 +276,7 @@ class ApiController{
         }));
     }
 
-    async destroy({ auth, params, response }) {
+    async destroy({ params, response }) {
         const queryData = this.modelData.query().where(this.modelData.primaryKey, params.id);
         const findData = await queryData.first()
         if (!findData) {
@@ -299,7 +313,7 @@ class ApiController{
         }));
     }
 
-    async storeBulk({auth, request, response}){
+    async storeBulk({request, response}){
         const requestInsert = request.all();
         const requestInsertVal = this.modelData.fillable().created;
         if(!requestInsert["0"]){
@@ -401,7 +415,7 @@ class ApiController{
         }));
     }
 
-    async store({ auth, request, response }) {
+    async store({ request, response }) {
         const rules = this.modelData.validator().created;
         const validation = await validateAll(request.all(), rules);
         if (validation.fails()) {
@@ -446,10 +460,6 @@ class ApiController{
 
         var listData = request.only(this.modelData.fillable().created);
 
-        if(auth.user && this.modelData.fillable().created.includes('created_by')){
-            listData.created_by = auth.user.users_employees_id
-        }
-
         const processInsert = await this.modelData.create(listData);
 
         const storeDataRedis = await Redis.scanStream({
@@ -477,7 +487,7 @@ class ApiController{
         }));
     }
 
-    async update({ auth, params, request, response }) {
+    async update({ params, request, response }) {
         const rules = this.modelData.validator((params && params.id)).updated;
         const validation = await validateAll(request.all(), rules);
         if (validation.fails()) {
@@ -538,10 +548,6 @@ class ApiController{
             findData[keyListData] = listData[keyListData]
         }
 
-        if(auth.user && this.modelData.fillable().updated.includes('updated_by')){
-            findData.updated_by = auth.user.users_employees_id
-        }
-
         await findData.save();
 
         const storeDataRedis = await Redis.scanStream({
@@ -569,7 +575,7 @@ class ApiController{
         }));
     }
 
-    async count({ auth, params, request, response }) {
+    async count({ params, request, response }) {
 
         var date_start = request.get().date_start || moment().tz("Asia/Jakarta").subtract(1, 'months').format('YYYY-MM-DD')
 

@@ -33,7 +33,6 @@ class HistoryUser extends Model {
         this.addTrait('@provider:Lucid/SoftDeletes')
 
         this.addHook('beforeSave', (userInstance) => {
-            userInstance.setup_log_activities_users = JSON.stringify(userInstance.setup_log_activities_users)
             userInstance.setup_log_activities_old_data = JSON.stringify(userInstance.setup_log_activities_old_data)
             userInstance.setup_log_activities_newest_data = JSON.stringify(userInstance.setup_log_activities_newest_data)
         })

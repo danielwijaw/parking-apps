@@ -20,7 +20,7 @@ const metadataVersion = require("./../metadata.json")
 
 Route.group(() => {
 
-  Route.resource("category-class-student", "CategoryClassStudentController").apiOnly();
+  Route.resource("parking", "ParkingTransactionController").apiOnly();
 
 }).prefix("api/v1");
 
